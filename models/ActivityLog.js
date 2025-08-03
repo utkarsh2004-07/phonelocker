@@ -19,20 +19,38 @@ const activityLogSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Action is required'],
     enum: [
+      // Device actions
       'device_locked',
       'device_unlocked',
+      'device_registered',
+      'device_viewed',
+      'devices_viewed',
+      'bulk_lock',
+      'bulk_unlock',
+      // User actions
       'user_login',
       'user_logout',
       'user_created',
       'user_updated',
       'user_deleted',
+      'user_viewed',
+      'users_viewed',
+      // Shop actions
       'shop_created',
       'shop_updated',
+      'shop_deleted',
+      'shop_viewed',
+      'shops_viewed',
+      'shop_stats_viewed',
+      // Payment actions
       'emi_payment',
       'emi_default',
-      'bulk_lock',
-      'bulk_unlock',
+      // Admin actions
       'admin_action',
+      'dashboard_viewed',
+      'logs_viewed',
+      'system_health_viewed',
+      // Security actions
       'security_alert'
     ]
   },
