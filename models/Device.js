@@ -136,4 +136,38 @@ deviceSchema.methods.unlockDevice = function() {
   return this.save();
 };
 
+// Transform JSON output to avoid circular references
+deviceSchema.methods.toJSON = function() {
+  const device = this.toObject();
+
+  // If user is populated, only include essential fields
+  if (device.user && typeof device.user === 'object' && device.user._id) {
+    device.user = {
+      _id: device.user._id,
+      name: device.user.name,
+      phone: device.user.phone,
+      email: device.user.email,
+      deviceStatus: device.user.deviceStatus
+    };
+  }
+
+  // If shop is populated, only include essential fields
+  if (device.shop && typeof device.shop === 'object' && device.shop._id) {
+    device.shop = {
+      _id: device.shop._id,
+      name: device.shop.name
+    };
+  }
+
+  // If lockedBy is populated, only include essential fields
+  if (device.lockStatus && device.lockStatus.lockedBy && typeof device.lockStatus.lockedBy === 'object') {
+    device.lockStatus.lockedBy = {
+      _id: device.lockStatus.lockedBy._id,
+      name: device.lockStatus.lockedBy.name
+    };
+  }
+
+  return device;
+};
+
 module.exports = mongoose.model('Device', deviceSchema);

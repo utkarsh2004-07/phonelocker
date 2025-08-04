@@ -294,10 +294,38 @@ const lockDevice = async (req, res) => {
     // Here you would typically send a real-time notification to the device
     // For now, we'll just emit a socket event (to be implemented with Socket.IO)
     
+    // Prepare clean response data to avoid circular references
+    const responseDevice = {
+      _id: device._id,
+      deviceId: device.deviceId,
+      imeiNumber: device.imeiNumber,
+      lockStatus: {
+        isLocked: device.lockStatus.isLocked,
+        lockedAt: device.lockStatus.lockedAt,
+        lockReason: device.lockStatus.lockReason,
+        lockedBy: device.lockStatus.lockedBy
+      },
+      connectionStatus: device.connectionStatus,
+      security: device.security,
+      isActive: device.isActive,
+      user: {
+        _id: device.user._id,
+        name: device.user.name,
+        phone: device.user.phone,
+        deviceStatus: device.user.deviceStatus
+      },
+      shop: {
+        _id: device.shop._id,
+        name: device.shop.name
+      },
+      createdAt: device.createdAt,
+      updatedAt: device.updatedAt
+    };
+
     res.json({
       success: true,
       message: 'Device locked successfully',
-      data: { device }
+      data: { device: responseDevice }
     });
   } catch (error) {
     console.error('Lock device error:', error);
@@ -368,10 +396,37 @@ const unlockDevice = async (req, res) => {
     //   severity: 'low'
     // });
 
+    // Prepare clean response data to avoid circular references
+    const responseDevice = {
+      _id: device._id,
+      deviceId: device.deviceId,
+      imeiNumber: device.imeiNumber,
+      lockStatus: {
+        isLocked: device.lockStatus.isLocked,
+        unlockedAt: device.lockStatus.unlockedAt,
+        lockReason: device.lockStatus.lockReason
+      },
+      connectionStatus: device.connectionStatus,
+      security: device.security,
+      isActive: device.isActive,
+      user: {
+        _id: device.user._id,
+        name: device.user.name,
+        phone: device.user.phone,
+        deviceStatus: device.user.deviceStatus
+      },
+      shop: {
+        _id: device.shop._id,
+        name: device.shop.name
+      },
+      createdAt: device.createdAt,
+      updatedAt: device.updatedAt
+    };
+
     res.json({
       success: true,
       message: 'Device unlocked successfully',
-      data: { device }
+      data: { device: responseDevice }
     });
   } catch (error) {
     console.error('Unlock device error:', error);
